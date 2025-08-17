@@ -7,25 +7,39 @@
 // Global variables
 let scene, camera, renderer, controls;
 let player = { height: 1.8, speed: 12, jumpHeight: 20, grounded: false };
-let raycaster = new THREE.Raycaster();
-let mouse = new THREE.Vector2();
-let projectsData = null;
+let raycaster, mouse, projectsData = null;
 let platforms = [];
 let infoScreens = [];
 let particles = [];
-let clock = new THREE.Clock();
+let clock;
 
 // Movement variables
 let moveForward = false, moveBackward = false, moveLeft = false, moveRight = false;
-let velocity = new THREE.Vector3();
-let direction = new THREE.Vector3();
+let velocity, direction;
 let prevTime = performance.now();
 
 // Initialize the game
 async function init() {
     try {
+        // Check if Three.js is loaded
+        if (typeof THREE === 'undefined') {
+            throw new Error('Three.js failed to load. Please check your internet connection.');
+        }
+        
+        console.log('Three.js loaded successfully');
+        
+        // Initialize Three.js variables now that library is loaded
+        raycaster = new THREE.Raycaster();
+        mouse = new THREE.Vector2();
+        clock = new THREE.Clock();
+        velocity = new THREE.Vector3();
+        direction = new THREE.Vector3();
+        
         // Load project data
         const response = await fetch('./projects.json');
+        if (!response.ok) {
+            throw new Error(`Failed to load projects.json: ${response.status}`);
+        }
         projectsData = await response.json();
         
         console.log('Projects loaded:', projectsData);
@@ -48,7 +62,12 @@ async function init() {
         
     } catch (error) {
         console.error('Failed to initialize game:', error);
-        document.getElementById('loading').innerHTML = '<h1>Failed to load game</h1><p>Please check console for details</p>';
+        document.getElementById('loading').innerHTML = `
+            <h1>Failed to load game</h1>
+            <p>Error: ${error.message}</p>
+            <p>Please check console for details</p>
+            <button onclick="location.reload()">Retry</button>
+        `;
     }
 }
 
