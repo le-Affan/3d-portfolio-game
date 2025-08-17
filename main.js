@@ -36,11 +36,53 @@ async function init() {
         direction = new THREE.Vector3();
         
         // Load project data
-        const response = await fetch('./projects.json');
-        if (!response.ok) {
-            throw new Error(`Failed to load projects.json: ${response.status}`);
+        try {
+            const response = await fetch('./projects.json');
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            projectsData = await response.json();
+        } catch (fetchError) {
+            console.warn('Failed to load projects.json, using fallback data:', fetchError);
+            // Use embedded fallback data
+            projectsData = {
+                "personalInfo": {
+                    "name": "Affan Shaikh",
+                    "email": "shaikhaffan.work@gmail.com",
+                    "linkedin": "https://www.linkedin.com/in/affan-shaikh-ml/",
+                    "github": "https://github.com/le-Affan"
+                },
+                "projects": [
+                    {
+                        "id": "data-analyst-agent",
+                        "name": "Data Analyst AI Agent",
+                        "description": "Built AI agent for dynamic data analysis and Q&A across CSV, Excel, Text, PDF, Image, and Audio. Automated visualizations using Matplotlib and Seaborn.",
+                        "techStack": ["Python", "LLaMA-4 Maverick", "Together.ai API"],
+                        "githubUrl": "https://github.com/le-Affan/Data-Analyst-Agent",
+                        "position": { "x": 0, "y": 2, "z": 0 },
+                        "color": "#00ff88"
+                    },
+                    {
+                        "id": "crypto-trading-bot",
+                        "name": "Crypto Trading Bot",
+                        "description": "Developed Python CLI bot supporting mock market, limit, and stop-limit orders. Implemented input validation and systematic logging.",
+                        "techStack": ["Python", "python-binance", "CLI", "Logging"],
+                        "githubUrl": "https://github.com/le-Affan/basic_binance_bot",
+                        "position": { "x": 15, "y": 2, "z": -10 },
+                        "color": "#ff6b35"
+                    },
+                    {
+                        "id": "pdf-processing-tool",
+                        "name": "PDF Processing Tool",
+                        "description": "Extracted structured outlines from PDFs for Adobe Connect The Dots Hackathon 2025. Dockerized solution for reproducible execution.",
+                        "techStack": ["Python", "PDFplumber", "Docker", "Regex", "JSON"],
+                        "githubUrl": "https://github.com/le-Affan/PDF-Outline-Extractor",
+                        "position": { "x": -15, "y": 2, "z": -10 },
+                        "color": "#4ecdc4"
+                    }
+                ]
+            };
         }
-        projectsData = await response.json();
         
         console.log('Projects loaded:', projectsData);
         
@@ -66,7 +108,7 @@ async function init() {
             <h1>Failed to load game</h1>
             <p>Error: ${error.message}</p>
             <p>Please check console for details</p>
-            <button onclick="location.reload()">Retry</button>
+            <button onclick="location.reload()" style="background:#00ff88;color:black;border:none;padding:10px 20px;border-radius:5px;cursor:pointer;font-size:16px;">Retry</button>
         `;
     }
 }
@@ -130,24 +172,66 @@ function setupPlayer() {
 }
 
 function setupControls() {
-    // Setup PointerLockControls
-    controls = new THREE.PointerLockControls(camera, document.body);
-    
-    // Add controls object to scene (required for PointerLockControls)
-    scene.add(controls.getObject());
-    
-    // Handle pointer lock events
-    controls.addEventListener('lock', function() {
-        document.getElementById('instructions').style.display = 'none';
-        document.getElementById('hud').style.display = 'block';
-        document.getElementById('crosshair').style.display = 'block';
-    });
-    
-    controls.addEventListener('unlock', function() {
-        document.getElementById('hud').style.display = 'none';
-        document.getElementById('crosshair').style.display = 'none';
-        // Don't show instructions again unless page is refreshed
-    });
+    // Try to setup PointerLockControls, fallback if not available
+    try {
+        if (typeof THREE.PointerLockControls !== 'undefined') {
+            controls = new THREE.PointerLockControls(camera, document.body);
+            scene.add(controls.getObject());
+            
+            // Handle pointer lock events
+            controls.addEventListener('lock', function() {
+                document.getElementById('instructions').style.display = 'none';
+                document.getElementById('hud').style.display = 'block';
+                document.getElementById('crosshair').style.display = 'block';
+            });
+            
+            controls.addEventListener('unlock', function() {
+                document.getElementById('hud').style.display = 'none';
+                document.getElementById('crosshair').style.display = 'none';
+            });
+        } else {
+            throw new Error('PointerLockControls not available');
+        }
+    } catch (error) {
+        console.warn('PointerLockControls failed, using fallback:', error);
+        
+        // Create a simple fallback controls object
+        controls = {
+            getObject: function() { return camera; },
+            lock: function() {
+                document.getElementById('instructions').style.display = 'none';
+                document.getElementById('hud').style.display = 'block';
+                document.getElementById('crosshair').style.display = 'block';
+                this.isLocked = true;
+            },
+            unlock: function() {
+                document.getElementById('hud').style.display = 'none';
+                document.getElementById('crosshair').style.display = 'none';
+                this.isLocked = false;
+            },
+            isLocked: false,
+            moveRight: function(distance) { 
+                camera.translateX(-distance); 
+            },
+            moveForward: function(distance) { 
+                camera.translateZ(-distance); 
+            },
+            addEventListener: function() {}
+        };
+        
+        // Setup mouse controls for fallback
+        let mouseX = 0, mouseY = 0;
+        document.addEventListener('mousemove', function(event) {
+            if (!controls.isLocked) return;
+            
+            mouseX += event.movementX || event.mozMovementX || event.webkitMovementX || 0;
+            mouseY += event.movementY || event.mozMovementY || event.webkitMovementY || 0;
+            
+            camera.rotation.y = -mouseX * 0.002;
+            camera.rotation.x = -mouseY * 0.002;
+            camera.rotation.x = Math.max(-Math.PI/2, Math.min(Math.PI/2, camera.rotation.x));
+        });
+    }
 }
 
 function setupEventListeners() {

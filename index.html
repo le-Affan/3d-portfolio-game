@@ -149,6 +149,19 @@
     <script src="https://unpkg.com/three@0.159.0/build/three.min.js"></script>
     <script src="https://unpkg.com/three@0.159.0/examples/js/controls/PointerLockControls.js"></script>
     
+    <!-- Alternative CDN as fallback -->
+    <script>
+        // Fallback for PointerLockControls if first CDN fails
+        window.addEventListener('load', function() {
+            if (typeof THREE === 'undefined') {
+                document.getElementById('loading').innerHTML = '<h1>Loading Three.js...</h1><p>Trying alternative CDN...</p>';
+                const script = document.createElement('script');
+                script.src = 'https://cdn.jsdelivr.net/npm/three@0.159.0/build/three.min.js';
+                document.head.appendChild(script);
+            }
+        });
+    </script>
+    
     <!-- Main Game Script -->
     <script src="main.js"></script>
 </body>
