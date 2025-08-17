@@ -1,0 +1,44 @@
+{
+  "personalInfo": {
+    "name": "Affan Shaikh",
+    "email": "shaikhaffan.work@gmail.com",
+    "linkedin": "https://www.linkedin.com/in/affan-shaikh-ml/",
+    "github": "https://github.com/le-Affan"
+  },
+  "projects": [
+    {
+      "id": "data-analyst-agent",
+      "name": "Data Analyst AI Agent",
+      "description": "Built AI agent for dynamic data analysis and Q&A across CSV, Excel, Text, PDF, Image, and Audio. Automated visualizations using Matplotlib and Seaborn in Jupyter Notebook backend. Structured reusable code enabling scalable AI-driven analytics pipelines.",
+      "techStack": ["Python", "LLaMA-4 Maverick", "Together.ai API"],
+      "githubUrl": "https://github.com/le-Affan/Data-Analyst-Agent",
+      "position": { "x": 0, "y": 2, "z": 0 },
+      "color": "#00ff88"
+    },
+    {
+      "id": "crypto-trading-bot",
+      "name": "Crypto Trading Bot",
+      "description": "Developed Python CLI bot supporting mock market, limit, and stop-limit orders. Implemented input validation and systematic logging of all transactions and errors. Simulated trading for BTC, ETH, BNB, ADA, and SOL using USDT-M Futures. Organized code for modularity and future expansion of order types.",
+      "techStack": ["Python", "python-binance", "CLI", "Logging", "Mock Futures Simulation"],
+      "githubUrl": "https://github.com/le-Affan/basic_binance_bot",
+      "position": { "x": 15, "y": 2, "z": -10 },
+      "color": "#ff6b35"
+    },
+    {
+      "id": "pdf-processing-tool",
+      "name": "PDF Processing Tool",
+      "description": "Extracted structured outlines from PDFs for Adobe Connect The Dots Hackathon 2025. Dockerized solution for reproducible execution in isolated CPU-only environment (<16GB RAM).",
+      "techStack": ["Python", "PDFplumber", "Docker", "Regex", "JSON"],
+      "githubUrl": "https://github.com/le-Affan/PDF-Outline-Extractor",
+      "position": { "x": -15, "y": 2, "z": -10 },
+      "color": "#4ecdc4"
+    }
+  ],
+  "technicalSkills": [
+    "Python", "C", "SQL", "Bash", "Pandas", "NumPy", "Matplotlib", 
+    "Seaborn", "Scikit-learn", "PDFplumber", "python-binance", 
+    "python-dotenv", "Git", "GitHub", "Docker", "VS Code", 
+    "PyCharm", "Figma", "CLI Development", "Logging", 
+    "Input Validation", "Regex"
+  ]
+}

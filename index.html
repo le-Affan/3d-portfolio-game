@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Affan's 3D Portfolio Game</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #000;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            cursor: none;
+        }
+        
+        #gameCanvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+        
+        /* Instructions overlay */
+        #instructions {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            z-index: 1000;
+            border: 2px solid #00ff88;
+        }
+        
+        #instructions h2 {
+            color: #00ff88;
+            margin-top: 0;
+        }
+        
+        #instructions button {
+            background: #00ff88;
+            color: black;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        
+        #instructions button:hover {
+            background: #00cc6a;
+        }
+        
+        /* HUD Elements */
+        #hud {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            color: white;
+            z-index: 100;
+            font-size: 14px;
+        }
+        
+        #crosshair {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 20px;
+            height: 20px;
+            border: 2px solid #00ff88;
+            border-radius: 50%;
+            z-index: 100;
+            pointer-events: none;
+        }
+        
+        /* Loading screen */
+        #loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            color: #00ff88;
+            z-index: 2000;
+        }
+        
+        #loading h1 {
+            margin: 0 0 20px 0;
+            font-size: 2em;
+        }
+        
+        .loader {
+            border: 4px solid #333;
+            border-top: 4px solid #00ff88;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading">
+        <h1>Loading Portfolio Game...</h1>
+        <div class="loader"></div>
+    </div>
+    
+    <!-- Instructions Overlay -->
+    <div id="instructions">
+        <h2>Welcome to Affan's 3D Portfolio</h2>
+        <p><strong>Controls:</strong></p>
+        <p>• WASD - Move around</p>
+        <p>• Mouse - Look around</p>
+        <p>• SPACE - Jump</p>
+        <p>• Click on floating screens to visit links</p>
+        <p>• ESC - Release mouse lock</p>
+        <button onclick="startGame()">Start Exploring</button>
+    </div>
+    
+    <!-- HUD -->
+    <div id="hud">
+        <div>Use WASD to move, Mouse to look</div>
+        <div>Jump with SPACE, Click screens for links</div>
+    </div>
+    
+    <!-- Crosshair -->
+    <div id="crosshair"></div>
+    
+    <!-- Game Canvas -->
+    <canvas id="gameCanvas"></canvas>
+    
+    <!-- Three.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.159.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.159.0/examples/js/controls/PointerLockControls.js"></script>
+    
+    <!-- Main Game Script -->
+    <script src="main.js"></script>
+</body>
+</html>
